@@ -1,0 +1,26 @@
+# Environment variables & secrets
+.env
+*.env
+
+# Python cache & compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# IDE / Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker / OS / Temp files
+*.log
+.DS_Store
+Thumbs.db
