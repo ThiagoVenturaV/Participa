@@ -12,7 +12,8 @@ class Settings(BaseSettings):
     # Meta WhatsApp Cloud API Settings
     whatsapp_token: str = ""
     whatsapp_phone_number_id: str = ""
-    whatsapp_api_version: str = "v19.0"
+    whatsapp_api_version: str = "v20.0"
+
     webhook_verify_token: str = "meu_token_secreto_whatsapp_123"
 
     # Server Settings
