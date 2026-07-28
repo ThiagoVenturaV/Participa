@@ -152,13 +152,18 @@ Para conectar seu ambiente local aos servidores da Meta (WhatsApp):
 
 ## 🐳 Executando com Docker
 
-Para subir a aplicação via **Docker Compose**:
+1. Defina o seu `NGROK_AUTHTOKEN` no arquivo `.env` (obtenha em [dashboard.ngrok.com](https://dashboard.ngrok.com/get-started/your-authtoken)).
+2. Para subir a aplicação e o Ngrok via **Docker Compose**:
 
 ```bash
 docker-compose up --build -d
 ```
 
-Para visualizar os logs da aplicação:
+3. Para ver a URL pública gerada pelo Ngrok no container:
+   - Acesse `http://localhost:4040` no seu navegador, ou
+   - Execute: `curl http://localhost:4040/api/tunnels`
+
+Para visualizar os logs:
 ```bash
 docker-compose logs -f
 ```

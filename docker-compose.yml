@@ -27,3 +27,19 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok_participa
+    restart: unless-stopped
+    command:
+      - "http"
+      - "agente_participa:8000"
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    ports:
+      - "4040:4040"
+    depends_on:
+      agente_participa:
+        condition: service_healthy
+
