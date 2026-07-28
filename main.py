@@ -80,12 +80,14 @@ async def receive_webhook(request: Request, background_tasks: BackgroundTasks):
     """
     try:
         payload = await request.json()
+        print(f"[WEBHOOK POST] Payload recebido: {payload}")
         
         # Faz o parse da mensagem
         parsed_data = parse_whatsapp_payload(payload)
         
         if parsed_data:
             sender_phone, sender_name, message_text = parsed_data
+            print(f"[WEBHOOK POST] Mensagem extraida -> De: {sender_name} ({sender_phone}): '{message_text}'")
             
             # Adiciona o processamento do LangGraph como tarefa em segundo plano
             background_tasks.add_task(
@@ -94,6 +96,8 @@ async def receive_webhook(request: Request, background_tasks: BackgroundTasks):
                 sender_name=sender_name,
                 message_text=message_text
             )
+        else:
+            print("[WEBHOOK POST] Evento recebido da Meta (ex: status/leitura ou payload sem mensagem). Ignorando.")
         
         # Retorna 200 OK imediatamente para a Meta não reenviar a requisição
         return JSONResponse(content={"status": "received"}, status_code=200)
@@ -101,6 +105,7 @@ async def receive_webhook(request: Request, background_tasks: BackgroundTasks):
         print(f"[ERRO] Erro ao receber webhook: {e}")
         # Mesmo com erro de parse interno, responde 200 OK para evitar retentativas infinitas do WhatsApp
         return JSONResponse(content={"status": "error", "detail": str(e)}, status_code=200)
+
 
 if __name__ == "__main__":
     uvicorn.run(app_module, host=settings.host, port=settings.port, reload=True)
