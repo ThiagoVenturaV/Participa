@@ -1,3 +1,4 @@
+import hashlib
 import os
 from typing import Literal
 from langchain_core.messages import SystemMessage, HumanMessage
@@ -94,7 +95,8 @@ async def process_whatsapp_message(sender_phone: str, sender_name: str, message_
     Executa o grafo do LangGraph para um determinado usuário do WhatsApp.
     O número de telefone é usado como thread_id único para manter a memória.
     """
-    config = {"configurable": {"thread_id": sender_phone}}
+    thread_id = hashlib.sha256(sender_phone.encode("utf-8")).hexdigest()
+    config = {"configurable": {"thread_id": thread_id}}
     
     input_state = {
         "messages": [HumanMessage(content=message_text)],

@@ -1,4 +1,4 @@
-import os
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
@@ -14,7 +14,8 @@ class Settings(BaseSettings):
     whatsapp_phone_number_id: str = ""
     whatsapp_api_version: str = "v20.0"
 
-    webhook_verify_token: str = "meu_token_secreto_whatsapp_123"
+    webhook_verify_token: str = Field(min_length=16)
+    whatsapp_app_secret: str = Field(min_length=16)
 
     # Server Settings
     port: int = 8000

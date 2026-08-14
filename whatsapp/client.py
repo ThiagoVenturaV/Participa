@@ -9,8 +9,7 @@ async def send_whatsapp_message(to_phone: str, message_text: str) -> bool:
     Envia uma mensagem de texto de resposta para o usuário no WhatsApp via Meta Cloud API.
     """
     if not settings.whatsapp_token or not settings.whatsapp_phone_number_id:
-        print(f"[AVISO] WHATSAPP_TOKEN ou WHATSAPP_PHONE_NUMBER_ID nao configurados.")
-        print(f" Simulacao de envio para [{to_phone}]: {message_text}")
+        print("[AVISO] Credenciais do WhatsApp não configuradas; envio recusado.")
         return False
 
     url = f"https://graph.facebook.com/{settings.whatsapp_api_version}/{settings.whatsapp_phone_number_id}/messages"
@@ -36,11 +35,11 @@ async def send_whatsapp_message(to_phone: str, message_text: str) -> bool:
             response = await client.post(url, json=payload, headers=headers, timeout=10.0)
             
             if response.status_code == 200:
-                print(f"[OK] Mensagem enviada com sucesso para {to_phone}")
+                print("[OK] Mensagem enviada com sucesso.")
                 return True
             else:
-                print(f"[ERRO] Erro ao enviar mensagem no WhatsApp ({response.status_code}): {response.text}")
+                print(f"[ERRO] WhatsApp recusou o envio com status {response.status_code}.")
                 return False
-    except Exception as e:
-        print(f"[ERRO] Excecao na requisicao do WhatsApp Client: {e}")
+    except httpx.HTTPError:
+        print("[ERRO] Falha de rede ao enviar mensagem ao WhatsApp.")
         return False

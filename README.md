@@ -85,9 +85,10 @@ LLM_PROVIDER=groq
 LLM_MODEL=llama-3.3-70b-versatile
 
 # Credenciais da Meta Cloud API
-WHATSAPP_TOKEN=EAAG...
-WHATSAPP_PHONE_NUMBER_ID=1287924531064501
-WEBHOOK_VERIFY_TOKEN=meu_token_secreto_whatsapp_123
+WHATSAPP_TOKEN=<token gerenciado fora do Git>
+WHATSAPP_PHONE_NUMBER_ID=<id do número>
+WEBHOOK_VERIFY_TOKEN=<valor aleatório com pelo menos 16 caracteres>
+WHATSAPP_APP_SECRET=<segredo do aplicativo Meta>
 
 # Servidor
 PORT=8000
@@ -132,10 +133,12 @@ Para conectar seu ambiente local aos servidores da Meta (WhatsApp):
 3. Adicione o produto **WhatsApp**.
 4. Na barra lateral, acesse **WhatsApp** > **Configuração**:
    - **URL de callback**: `https://seu-dominio.ngrok-free.app/webhook`
-   - **Verificar token**: O mesmo valor definido em `WEBHOOK_VERIFY_TOKEN` no `.env` (ex: `meu_token_secreto_whatsapp_123`).
+   - **Verificar token**: O mesmo valor aleatório definido em `WEBHOOK_VERIFY_TOKEN` no `.env`.
    - Clique em **Verificar e Salvar**.
 5. Na seção **Campos do Webhook**, localize o evento **`messages`** e clique em **Assinar (Subscribe)**.
 6. Obtenha seu **ID do Número de Telefone** e o **Token de Acesso** e salve no seu `.env`.
+
+O POST do webhook exige `X-Hub-Signature-256` válido, calculado pela Meta com `WHATSAPP_APP_SECRET`. Requisições sem assinatura ou alteradas são recusadas antes do parse e não têm conteúdo/telefone registrado em logs.
 
 ---
 

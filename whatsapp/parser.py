@@ -1,6 +1,6 @@
 from typing import Optional, Dict, Any, Tuple
 
-def parse_whatsapp_payload(payload: Dict[str, Any]) -> Optional[Tuple[str, str, str]]:
+def parse_whatsapp_payload(payload: Dict[str, Any]) -> Optional[Tuple[str, str, str, str]]:
     """
     Parse o payload recebido via webhook do WhatsApp (Meta Cloud API).
     
@@ -10,13 +10,6 @@ def parse_whatsapp_payload(payload: Dict[str, Any]) -> Optional[Tuple[str, str, 
     try:
         entry = payload.get("entry", [])
         if not entry:
-            # Tenta suporte alternativo (ex: Evolution API ou webhook genérico)
-            if "data" in payload and "key" in payload["data"]:
-                sender_phone = payload["data"]["key"].get("remoteJid", "").split("@")[0]
-                message_text = payload["data"].get("message", {}).get("conversation", "")
-                sender_name = payload["data"].get("pushName", "Usuário")
-                if sender_phone and message_text:
-                    return sender_phone, sender_name, message_text
             return None
 
         changes = entry[0].get("changes", [])
@@ -30,6 +23,7 @@ def parse_whatsapp_payload(payload: Dict[str, Any]) -> Optional[Tuple[str, str, 
             return None
 
         message = messages[0]
+        message_id = message.get("id", "")
         # Suporta apenas mensagens do tipo 'text' nesta versão simples
         msg_type = message.get("type")
         if msg_type != "text":
@@ -37,7 +31,9 @@ def parse_whatsapp_payload(payload: Dict[str, Any]) -> Optional[Tuple[str, str, 
             sender_phone = message.get("from")
             contacts = value.get("contacts", [])
             sender_name = contacts[0].get("profile", {}).get("name", "Usuário") if contacts else "Usuário"
-            return sender_phone, sender_name, "[O usuário enviou uma mídia ou tipo de mensagem não suportado ainda]"
+            if sender_phone and message_id:
+                return sender_phone, sender_name, "[O usuário enviou uma mídia ou tipo de mensagem não suportado ainda]", message_id
+            return None
 
         sender_phone = message.get("from")
         message_text = message.get("text", {}).get("body", "")
@@ -45,10 +41,9 @@ def parse_whatsapp_payload(payload: Dict[str, Any]) -> Optional[Tuple[str, str, 
         contacts = value.get("contacts", [])
         sender_name = contacts[0].get("profile", {}).get("name", "Usuário") if contacts else "Usuário"
 
-        if sender_phone and message_text:
-            return sender_phone, sender_name, message_text
+        if sender_phone and message_text and message_id:
+            return sender_phone, sender_name, message_text[:4000], message_id
 
         return None
-    except Exception as e:
-        print(f"Erro ao realizar parse do payload do WhatsApp: {e}")
+    except (AttributeError, IndexError, TypeError):
         return None
