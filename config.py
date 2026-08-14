@@ -19,7 +19,7 @@ class Settings(BaseSettings):
 
     # Server Settings
     port: int = 8000
-    host: str = "0.0.0.0"
+    host: str = "127.0.0.1"
 
     model_config = SettingsConfigDict(
         env_file=".env",
