@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     google_api_key: str = ""
     groq_api_key: str = ""
     llm_provider: str = "groq"  # "groq", "openai" ou "gemini"
-    llm_model: str = "llama-3.3-70b-versatile" # ex: "llama-3.3-70b-versatile", "llama-3.1-8b-instant", "gpt-4o-mini"
+    llm_model: str = "openai/gpt-oss-120b" # ex: "openai/gpt-oss-120b", "qwen/qwen3.6-27b", "gpt-4o-mini"
 
     # Meta WhatsApp Cloud API Settings
     whatsapp_token: str = ""

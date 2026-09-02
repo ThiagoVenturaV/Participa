@@ -16,7 +16,7 @@ Este repositório contém a implementação completa da solução **Agente Parti
 
 - 💬 **Integração Nativa com Meta WhatsApp Cloud API**: Recebimento de mensagens via Webhook com suporte a processamento assíncrono em segundo plano (`BackgroundTasks`).
 - 🧠 **Agente ReAct com LangGraph**: Suporte a memória de conversação por usuário (`thread_id` mapeado para o telefone) e uso de ferramentas personalizadas.
-- ⚡ **Multi-Provedor de LLM**: Suporte alternável e simplificado para **Groq** (Llama 3.3 70B), **Google Gemini** e **OpenAI**.
+- ⚡ **Multi-Provedor de LLM**: Suporte alternável e simplificado para **Groq** (GPT-OSS 120B), **Google Gemini** e **OpenAI**.
 - 🛠️ **Ferramentas Extensíveis**: Sistema modular de ferramentas em `agent/tools.py` (busca em FAQ, consulta de horários, etc).
 - 🛡️ **Segurança & Boas Práticas**: Validação de ambiente via `pydantic-settings` e proteção de segredos com `.gitignore`.
 - 🐳 **Docker & Docker Compose**: Configuração pronta para implantação em ambiente local ou produção.
@@ -82,7 +82,7 @@ Edite o arquivo `.env` informando suas credenciais:
 # Chave da IA (Groq, Gemini ou OpenAI)
 GROQ_API_KEY=gsk_sua_chave_groq_aqui
 LLM_PROVIDER=groq
-LLM_MODEL=llama-3.3-70b-versatile
+LLM_MODEL=openai/gpt-oss-120b
 
 # Credenciais da Meta Cloud API
 WHATSAPP_TOKEN=<token gerenciado fora do Git>

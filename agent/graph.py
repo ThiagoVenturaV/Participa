@@ -23,7 +23,7 @@ def get_llm():
     
     if provider == "groq":
         groq_key = settings.groq_api_key or os.getenv("GROQ_API_KEY") or ""
-        model_name = settings.llm_model if settings.llm_model and ("llama" in settings.llm_model or "mixtral" in settings.llm_model or "gemma" in settings.llm_model or "deepseek" in settings.llm_model) else "llama-3.3-70b-versatile"
+        model_name = (settings.llm_model or "openai/gpt-oss-120b").strip()
         return ChatOpenAI(
             model=model_name,
             api_key=groq_key,
